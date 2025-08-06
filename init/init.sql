@@ -1,0 +1,5 @@
+CREATE DATABASE notificationdb;
+CREATE DATABASE orderdb;
+CREATE DATABASE userdb;
+CREATE DATABASE inventorydb;
+CREATE DATABASE paymentdb;

@@ -1,0 +1,5 @@
+fastapi
+pymongo
+asyncpg
+uvicorn 
+pydantic

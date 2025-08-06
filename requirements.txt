@@ -1,0 +1,11 @@
+fastapi
+sqlalchemy
+pydantic
+passlib[bcrypt]
+python-jose
+psycopg2-binary
+uvicorn
+PyJWT
+motor
+bson
+httpx 

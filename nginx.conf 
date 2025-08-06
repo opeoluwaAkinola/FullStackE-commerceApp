@@ -1,0 +1,106 @@
+# nginx.conf - API Gateway configuration
+events {
+    worker_connections 1024;
+}
+
+http {
+    upstream user-service {
+        server user-service:8001;
+    }
+
+    upstream product-service {
+        server product-service:8002;
+    }
+
+    upstream order-service {
+        server order-service:8003;
+    }
+
+    upstream payment-service {
+        server payment-service:8004;
+    }
+
+    upstream inventory-service {
+        server inventory-service:8005;
+    }
+
+    upstream notification-service {
+        server notification-service:8006;
+    }
+
+    server {
+        listen 80;
+        
+        # Health check endpoint
+        location /health {
+            return 200 "API Gateway is healthy\n";
+            add_header Content-Type text/plain;
+        }
+
+        # User service routes
+        location /api/auth/ {
+            proxy_pass http://user-service/auth/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /api/users/ {
+            proxy_pass http://user-service/users/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Product service routes
+        location /api/products/ {
+            proxy_pass http://product-service/products/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Order service routes
+        location /api/orders/ {
+            proxy_pass http://order-service/orders/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Payment service routes
+        location /api/payments/ {
+            proxy_pass http://payment-service/payments/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Inventory service routes
+        location /api/inventory/ {
+            proxy_pass http://inventory-service/inventory/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Notification service routes
+        location /api/notifications/ {
+            proxy_pass http://notification-service/notifications/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Rate limiting
+        limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+        limit_req zone=api burst=20 nodelay;
+    }
+}

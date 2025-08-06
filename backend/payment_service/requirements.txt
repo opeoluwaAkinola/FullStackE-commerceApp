@@ -1,0 +1,7 @@
+fastapi
+asyncpg
+uvicorn
+SQLAlchemy
+pydantic
+httpx
+psycopg2-binary
